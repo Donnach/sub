@@ -1,12 +1,18 @@
 # Shadowrocket rule-set
 [General]
-dns-server = 1.2.4.8, 114.114.114.114, 223.5.5.5, 8.8.8.8, system
-bypass-tun = 0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.168.0.0/16, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32
+dns-server = 1.2.4.8,223.5.5.5,223.6.6.6,119.29.29.29,182.254.116.116,114.144.114.114,114.114.114.115,180.76.76.76,117.50.11.11,117.50.22.22,8.8.8.8,8.8.4.4,1.2.4.8,210.2.4.8,208.67.222.222,208.67.220.220,system
+bypass-tun = 0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.168.0.0/16, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32, localhost, *.local, *.crashlytics.com
 skip-proxy = localhost, *.local, captive.apple.com, 0.0.0.0/8, 10.0.0.0/8, 17.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.168.0.0/16, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4, 255.255.255.255/32
 bypass-system = true
 ipv6 = true
 
 [Rule]
+/ Apple证书防吊销
+DOMAIN-SUFFIX,mesu.apple.com,REJECT
+DOMAIN-SUFFIX,ocsp.apple.com,REJECT
+DOMAIN,mesu.apple.com,REJECT
+DOMAIN,ocsp.apple.com,REJECT
+
 # Unbreak
 RULE-SET,https://raw.githubusercontent.com/DivineEngine/Profiles/master/Surge/Ruleset/Unbreak.list,DIRECT
 
@@ -42,7 +48,7 @@ DOMAIN-SUFFIX,tiktokv.com,PROXY
 DOMAIN-SUFFIX,musical.ly,PROXY
 
 GEOIP,CN,DIRECT
-FINAL,PROXY
+FINAL,DIRECT
 
 [Host]
 
@@ -149,9 +155,16 @@ FINAL,PROXY
 ^(http|https):\/\/m\d\.amap\.com\/ws\/valueadded\/alimama\/splash_screen\/ - reject
 # > YOUKU
 ^(http|https):\/\/[\w-.]+\.ott\.cibntv\.net\/[\w\/-]+.mp4\?sid= - reject
+^https?:\/\/.+\.mp4\?ccode=0902 - reject
+^https?:\/\/.+\.mp4\?sid= - reject
+^https?:\/\/vali\.cp31\.ott\.cibntv\.net\/youku\/.+\.mp4\?sid= - reject
 # ---
 # > AcFun - api-new.app.acfun.cn
 ^(http|https):\/\/api-new\.app\.acfun\.cn\/rest\/app\/flash\/screen\/ - reject
+# > 爱回收
+^https?:\/\/gw\.aihuishou\.com\/app-portal\/home\/getadvertisement - reject
+# > APICloud
+^https?:\/\/a\.apicloud\.com\/start_page\/ - reject
 # > AiMeiJu - api.bjxkhc.com
 ^(http|https):\/\/api\.bjxkhc\.com\/index\.php\/app\/ios\/ads\/ - reject
 
@@ -190,12 +203,15 @@ FINAL,PROXY
 ^(http|https):\/\/iapi\.bishijie\.com\/actopen\/advertising\/ - reject
 # > Beike - app.api.ke.com
 ^(http|https):\/\/app\.api\.ke\.com\/config\/config\/bootpage - reject
-# > boohee
+# > boohee 薄荷
 ^(http|https):\/\/((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\/api\/v\d\/app_square\/start_up_with_ad$ - reject
+^https?:\/\/status\.boohee\.com\/api\/v\d\/app_square\/start_up_with_ad - reject
 # > bodivis - www.bodivis.com.cn
 ^(http|https):\/\/www\.bodivis\.com\.cn\/app\/splashAdvertise - reject
 # > BabyHealth - yxyapi*.drcuiyutao.com
 ^(http|https):\/\/yxyapi\d\.drcuiyutao\.com\/yxy-api-gateway\/api\/json\/advert\/ - reject
+
+
 
 # C
 # > ChinaMobile - clientaccess.10086.cn
@@ -284,6 +300,7 @@ FINAL,PROXY
 ^(http|https):\/\/\w+\.youtube\.com\/api\/stats\/ads - reject
 ^(http|https):\/\/\w+\.youtube\.com\/(pagead|ptracking) - reject
 ctier=[A-Z] citer=A 302
+
 # > Gofun - gateway.shouqiev.com
 ^(http|https):\/\/gateway\.shouqiev\.com\/fsda\/app\/bootImage\.json - reject
 # > Guotai Junan Securities - dl.app.gtja.com
@@ -564,6 +581,8 @@ ctier=[A-Z] citer=A 302
 # > YYeTss
 ^(http|https):\/\/tj\.playcvn\.com\/app\/ads\? - reject
 ^(http|https):\/\/\w+\.jstucdn\.com\/(g3\/|js\/ad) - reject
+# > 萤石云视频
+^https?:\/\/i\.ys7\.com\/api\/ads - reject
 
 # Z
 # > Zhihu - api.zhihu.com
@@ -590,7 +609,37 @@ ctier=[A-Z] citer=A 302
 # > Zhangyue - webboot.zhangyue.com,saad.ms.zhangyue.net
 ^(http|https):\/\/webboot\.zhangyue\.com\/zycl\/api\/ad\/ - reject
 ^(http|https):\/\/saad\.ms\.zhangyue\.net\/ad - reject
-
+# > 中国银行
+^https?:\/\/mlife\.jf365\.boc\.cn\/AppPrj\/FirstPic\.do\? - reject
+# > 中信银行
+^https?:\/\/m\.creditcard\.ecitic\.com\/citiccard\/mbk\/.+\/appStartAdv - reject
+# > 中国工商银行
+^https?:\/\/v\.icbc\.com\.cn\/userfiles\/Resources\/WAP\/advertisement\/ - reject
+# > 中国招商银行
+^https?:\/\/mlife\.cmbchina\.com\/ClientFaceService\/preCacheAdvertise\.json - reject
+^https?:\/\/mlife\.cmbchina\.com\/ClientFaceService\/getAdvertisement\.json - reject
+^https?:\/\/pic1cdn\.cmbchina\.com\/appinitads\/ - reject
+# > 中国民生银行
+^https?:\/\/www\.cmbc\.com\.cn\/m\/image\/loadingpage\/ - reject
+# > 中国广发银行
+^https?:\/\/mps\.95508\.com\/mps\/club\/cardPortals\/adv\/.{25}\.jpg - reject
+# > 中国移动
+# >> 手机营业厅
+^https?:\/\/clientaccess\.10086\.cn\/biz-orange\/DN\/init\/startInit - reject
+# >> 江苏
+^https?:\/\/wap\.js\.10086\.cn\/jsmccClient\/cd\/market_content\/api\/v\d\/market_content\.page\.query - reject
+# >> 咪咕
+^https?:\/\/gg\w+\.cmvideo\.cn\/v\d\/iflyad\/ - reject
+^https?:\/\/ggic(\d)?\.cmvideo\.cn\/ad\/ - reject
+^https?:\/\/ggx\.cmvideo\.cn\/request\/ - reject
+^https?:\/\/.+\/cdn-adn\/ - reject
+# > 中国联通
+^https?:\/\/m\.client\.10010\.com\/mobileService\/customer\/accountListData\.htm - reject
+^https?:\/\/m\.client\.10010\.com\/uniAdmsInterface\/getWelcomeAd - reject
+# > 掌阅
+^https?:\/\/ih2\.ireader\.com\/zyapi\/bookstore\/ad\/ - reject
+^https?:\/\/ih2\.ireader\.com\/zyapi\/self\/screen\/ad - reject
+^https?:\/\/ih2\.ireader\.com\/zycl\/api\/ad\/ - reject
 # tiktok解锁
 (?<=_region=)CN(?=&) JP 302
 (?<=\d\/\?version_code=)1[6-9]..(?=.?.?&) 17 302
@@ -598,6 +647,7 @@ ctier=[A-Z] citer=A 302
 (?<=&mcc_mnc=)4 2 302
 ctier=[A-Z] ctier=A 302
 ^https:\/\/[\s\S]*\.googlevideo\.com/.*&(oad|ctier) _ REJECT
+
 
 
 [MITM]
